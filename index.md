@@ -55,7 +55,7 @@ Identify query sheet:
 
     ##                   Spreadsheet title: Pre-course survey (Responses)
     ##                  Spreadsheet author: tapa741
-    ##   Date of googlesheets registration: 2018-03-18 20:02:48 GMT
+    ##   Date of googlesheets registration: 2018-03-18 20:06:19 GMT
     ##     Date of last spreadsheet update: 2018-03-18 18:14:38 GMT
     ##                          visibility: private
     ##                         permissions: rw
@@ -110,6 +110,21 @@ Identify query sheet:
     ## #   continuous, csv, json, xls, html, etc.):` <chr>, `Email Address` <lgl>
 
 ``` r
-resp_gathered <- responses %>% 
-  gather(key = key, value = value, -Timestamp)
+(resp_gathered <- responses %>% 
+  gather(key = key, value = value, -Timestamp))
 ```
+
+    ## # A tibble: 91 x 3
+    ##    Timestamp          key                                    value
+    ##    <chr>              <chr>                                  <chr>
+    ##  1 3/8/2018 16:25:36  How big is your previous R experience? 5    
+    ##  2 3/14/2018 12:13:45 How big is your previous R experience? 1    
+    ##  3 3/14/2018 12:15:29 How big is your previous R experience? 1    
+    ##  4 3/14/2018 13:09:46 How big is your previous R experience? 1    
+    ##  5 3/14/2018 13:50:48 How big is your previous R experience? 5    
+    ##  6 3/14/2018 15:21:56 How big is your previous R experience? 1    
+    ##  7 3/14/2018 19:36:32 How big is your previous R experience? 1    
+    ##  8 3/15/2018 15:37:35 How big is your previous R experience? 1    
+    ##  9 3/16/2018 13:23:51 How big is your previous R experience? 1    
+    ## 10 3/17/2018 12:31:58 How big is your previous R experience? 2    
+    ## # ... with 81 more rows

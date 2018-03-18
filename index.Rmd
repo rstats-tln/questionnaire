@@ -30,8 +30,8 @@ Identify query sheet:
 ```
 
 ```{r}
-resp_gathered <- responses %>% 
-  gather(key = key, value = value, -Timestamp)
+(resp_gathered <- responses %>% 
+  gather(key = key, value = value, -Timestamp))
 ```
 
 
