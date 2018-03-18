@@ -21,7 +21,9 @@ Students were asked for answers to these questions:
 
 Load required functions (libraries):
 ```{r}
+# tidyverse is for data wrangling and plotting
 library(tidyverse)
+# g-sheets is for data downloading from google form sheet
 library(googlesheets)
 ```
 
@@ -31,6 +33,8 @@ Download query spreadsheet from google drive:
 ```{r}
 (my_sheets <- gs_ls())
 ```
+
+Haha, the first one seems to be what I'm looking for: "Pre-course … "
 
 Identify query sheet:
 ```{r}
@@ -106,9 +110,38 @@ resp_gathered %>%
   scale_y_continuous(breaks = seq(from = 0, to = 12, by = 2))
 ```
 
-Again, mostly all have GitHub account ...
+Again, mostly all have GitHub account ... but when was that account created?
 
+Let's download user data from GitHub. gh package contains functions to communicate with GitHub API:
 ```{r}
-resp_gathered %>% pull(key) %>% unique()
+library(gh)
 ```
 
+Get members of rstats-tln (this course) organization and extract usernames (login):
+```{r}
+members <- gh("GET /orgs/rstats-tln/members", .token = Sys.getenv("GITHUB_PAT"))
+(username <- map_chr(members, "login"))
+```
+
+Download user data:
+```{r}
+library(glue)
+users <- map(username, ~ gh(glue("GET /users/{.x}")))
+```
+
+We are interested in creation date of GH user account: 
+```{r}
+(created_at <- map_chr(users, "created_at"))
+```
+
+Plot out user account creation dates on time axis:
+```{r}
+library(lubridate)
+data_frame(username, created_at) %>%
+  mutate(created_at = ymd_hms(created_at)) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = created_at), bins = 60) +
+  scale_x_datetime()
+```
+
+**Most GitHub accounts were created last week...**

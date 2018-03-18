@@ -15,6 +15,7 @@ Students were asked for answers to these questions:
 Load required functions (libraries):
 
 ``` r
+# tidyverse is for data wrangling and plotting
 library(tidyverse)
 ```
 
@@ -30,6 +31,7 @@ library(tidyverse)
     ## ✖ dplyr::lag()    masks stats::lag()
 
 ``` r
+# g-sheets is for data downloading from google form sheet
 library(googlesheets)
 ```
 
@@ -58,6 +60,8 @@ Download query spreadsheet from google drive:
     ## # ... with 32 more rows, and 3 more variables: alternate <chr>,
     ## #   self <chr>, alt_key <chr>
 
+Haha, the first one seems to be what I'm looking for: "Pre-course … "
+
 Identify query sheet:
 
 ``` r
@@ -68,7 +72,7 @@ Identify query sheet:
 
     ##                   Spreadsheet title: Pre-course survey (Responses)
     ##                  Spreadsheet author: tapa741
-    ##   Date of googlesheets registration: 2018-03-18 21:42:01 GMT
+    ##   Date of googlesheets registration: 2018-03-18 23:00:22 GMT
     ##     Date of last spreadsheet update: 2018-03-18 21:10:51 GMT
     ##                          visibility: private
     ##                         permissions: rw
@@ -215,16 +219,74 @@ resp_gathered %>%
 
 ![](index_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
-Again, mostly all have GitHub account ...
+Again, mostly all have GitHub account ... but when was that account created?
+
+Let's download user data from GitHub. gh package contains functions to communicate with GitHub API:
 
 ``` r
-resp_gathered %>% pull(key) %>% unique()
+library(gh)
 ```
 
-    ## [1] "How big is your previous R experience?"                                                                                                                                                            
-    ## [2] "What operating system and version your computer is running?"                                                                                                                                       
-    ## [3] "Did you have running installation of the following software on your computer (check all that apply)?"                                                                                              
-    ## [4] "Do you have GitHub account?"                                                                                                                                                                       
-    ## [5] "Do you have your own dataset (at least in mind) that you would like to use for individual project?"                                                                                                
-    ## [6] "If you answered 'Yes' to previous question, please describe your dataset (name, how many rows/columns/number of variables, are your values categorical or continuous, csv, json, xls, html, etc.):"
-    ## [7] "Email Address"
+Get members of rstats-tln (this course) organization and extract usernames (login):
+
+``` r
+members <- gh("GET /orgs/rstats-tln/members", .token = Sys.getenv("GITHUB_PAT"))
+(username <- map_chr(members, "login"))
+```
+
+    ##  [1] "BobCat2511"   "hingelman"    "IlmatarRooda" "Jtuvikene"   
+    ##  [5] "LauraTamberg" "mvikentjeva"  "olga4u2c"     "SteffiWitter"
+    ##  [9] "taanielj"     "tpall"        "tteder"       "ymaivali"
+
+Download user data:
+
+``` r
+library(glue)
+```
+
+    ## 
+    ## Attaching package: 'glue'
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     collapse
+
+``` r
+users <- map(username, ~ gh(glue("GET /users/{.x}")))
+```
+
+We are interested in creation date of GH user account:
+
+``` r
+(created_at <- map_chr(users, "created_at"))
+```
+
+    ##  [1] "2018-03-14T13:14:44Z" "2018-03-12T14:59:05Z" "2018-03-14T15:13:50Z"
+    ##  [4] "2018-03-17T10:28:23Z" "2018-03-14T17:01:17Z" "2018-03-16T09:00:29Z"
+    ##  [7] "2018-03-14T10:42:38Z" "2018-03-18T07:19:50Z" "2015-04-21T13:10:36Z"
+    ## [10] "2013-06-25T09:13:50Z" "2018-03-14T10:06:53Z" "2016-07-12T15:34:30Z"
+
+Plot out user account creation dates on time axis:
+
+``` r
+library(lubridate)
+```
+
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following object is masked from 'package:base':
+    ## 
+    ##     date
+
+``` r
+data_frame(username, created_at) %>%
+  mutate(created_at = ymd_hms(created_at)) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = created_at), bins = 60) +
+  scale_x_datetime()
+```
+
+![](index_files/figure-markdown_github/unnamed-chunk-14-1.png)
+
+**Most GitHub accounts were created last week...**
