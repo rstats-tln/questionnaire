@@ -16,4 +16,4 @@ Students were asked for answers to these questions:
 
 - If you answered 'Yes' to previous question, please describe your dataset (name, how many rows/columns/number of variables, are your values categorical or continuous, csv, json, xls, html, etc.)
 
-To find out what were the answers to these questions please have a look at the index.md file on GitHub.
+To find out what were the answers to these questions please have a look at the [index.md](https://github.com/rstats-tln/questionnaire/blob/master/index.md) file on GitHub.
