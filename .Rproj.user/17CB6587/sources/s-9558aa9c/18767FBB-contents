@@ -1,0 +1,41 @@
+---
+title: "Pre course survey summary"
+author: Taavi Päll
+output: 
+  github_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load required functions (libraries):
+```{r}
+library(tidyverse)
+library(googlesheets)
+```
+
+Download query spreadsheet:
+```{r}
+(my_sheets <- gs_ls())
+```
+
+Identify query sheet:
+```{r}
+(surv <- gs_title("Pre-course survey (Responses)"))
+```
+
+```{r}
+(responses <- surv %>% gs_read())
+```
+
+```{r}
+resp_gathered <- responses %>% 
+  gather(key = key, value = value, -Timestamp)
+```
+
+
+```{r}
+
+```
+
