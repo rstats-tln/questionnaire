@@ -61,7 +61,7 @@ resp_gathered %>%
   labs(x = "How big is your previous R experience?")
 ```
 
-Mostly, students declare zero previous experience with R language. Obviously, it seems that five categories that I proposed in questionnaire was too much -- three categories would have been sufficient. 
+Mostly, students declare zero previous experience with R language. Obviously, it seems that five categories that I proposed in questionnaire was too much - three categories would have been sufficient. 
 
 **What operating system and version your computer is running?**
 

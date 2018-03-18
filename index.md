@@ -68,7 +68,7 @@ Identify query sheet:
 
     ##                   Spreadsheet title: Pre-course survey (Responses)
     ##                  Spreadsheet author: tapa741
-    ##   Date of googlesheets registration: 2018-03-18 21:40:22 GMT
+    ##   Date of googlesheets registration: 2018-03-18 21:42:01 GMT
     ##     Date of last spreadsheet update: 2018-03-18 21:10:51 GMT
     ##                          visibility: private
     ##                         permissions: rw
@@ -164,7 +164,7 @@ resp_gathered %>%
 
 ![](index_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-Mostly, students declare zero previous experience with R language. Obviously, it seems that five categories that I proposed in questionnaire was too much -- three categories would have been sufficient.
+Mostly, students declare zero previous experience with R language. Obviously, it seems that five categories that I proposed in questionnaire was too much - three categories would have been sufficient.
 
 **What operating system and version your computer is running?**
 
