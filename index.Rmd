@@ -9,6 +9,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+To better understand the level of R skills and if they have their own dataset for coursework, students were asked to fill in a short online questionnaire before the course start.
+
+Students were asked for answers to these questions:    
+- How big is your previous R experience?    
+- What operating system and version your computer is running?    
+- Did you have running installation of the following software on your computer?    
+- Do you have GitHub account?    
+- Do you have your own dataset (at least in mind) that you would like to use for individual project?    
+- If you answered 'Yes' to previous question, please describe your dataset (name, how many rows/columns/number of variables, are your values categorical or continuous, csv, json, xls, html, etc.)     
+
 Load required functions (libraries):
 ```{r}
 library(tidyverse)
@@ -49,5 +59,56 @@ resp_gathered %>%
   scale_x_discrete(labels = c("Null", "Little", "Have done\nsomething\nuseful")) +
   scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2)) +
   labs(x = "How big is your previous R experience?")
+```
+
+Mostly, students declare zero previous experience with R language. Obviously, it seems that five categories that I proposed in questionnaire was too much -- three categories would have been sufficient. 
+
+**What operating system and version your computer is running?**
+
+```{r}
+os <- resp_gathered %>% 
+  filter(key == "What operating system and version your computer is running?") %>% 
+  select(value, Timestamp) %>% 
+  mutate(value = str_to_lower(value),
+         value = str_remove(value, ",.*| x64"),
+         os = case_when(
+           str_detect(value, "macos") ~ "macOS",
+           str_detect(value, "os x") ~ "OS X",
+           TRUE ~ "Win"
+         ),
+         vers = str_extract(value, "[[:digit:][:punct:]]*( pro)?$"),
+         os = str_c(os, vers, sep = " "))
+os %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = os))
+```
+
+**Did you have running installation of the following software on your computer?**
+
+```{r}
+resp_gathered %>% 
+  filter(str_detect(key, "Did you have running")) %>% 
+  select(value, Timestamp) %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = value))
+```
+
+It's interesting that **git** was installed on all computers. Perhaps the question was ill-posed by me ...
+
+**Do you have GitHub account?**
+
+```{r}
+resp_gathered %>% 
+  filter(key == "Do you have GitHub account?") %>% 
+  select(value, Timestamp) %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = value)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 12, by = 2))
+```
+
+Again, mostly all have GitHub account ...
+
+```{r}
+resp_gathered %>% pull(key) %>% unique()
 ```
 

@@ -2,20 +2,30 @@ Pre course survey summary
 ================
 Taavi Päll
 
+To better understand the level of R skills and if they have their own dataset for coursework, students were asked to fill in a short online questionnaire before the course start.
+
+Students were asked for answers to these questions:
+- How big is your previous R experience?
+- What operating system and version your computer is running?
+- Did you have running installation of the following software on your computer?
+- Do you have GitHub account?
+- Do you have your own dataset (at least in mind) that you would like to use for individual project?
+- If you answered 'Yes' to previous question, please describe your dataset (name, how many rows/columns/number of variables, are your values categorical or continuous, csv, json, xls, html, etc.)
+
 Load required functions (libraries):
 
 ``` r
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ────────────────────────────────────────────── tidyverse 1.2.1 ──
+    ## ── Attaching packages ─────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
     ## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
     ## ✔ tidyr   0.8.0     ✔ stringr 1.3.0
     ## ✔ readr   1.1.1     ✔ forcats 0.3.0
 
-    ## ── Conflicts ───────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -35,7 +45,7 @@ Download query spreadsheet from google drive:
     ## # A tibble: 42 x 10
     ##    sheet_title  author perm  version updated             sheet_key ws_feed
     ##    <chr>        <chr>  <chr> <chr>   <dttm>              <chr>     <chr>  
-    ##  1 Pre-course … "    … rw    new     2018-03-18 18:14:38 13ukx0z0… https:…
+    ##  1 Pre-course … "    … rw    new     2018-03-18 21:10:51 13ukx0z0… https:…
     ##  2 Tour de Rõu… "    … r     new     2018-03-18 10:27:05 1OR1g2lu… https:…
     ##  3 "          … sande… r     new     2018-03-12 07:10:16 14wc18fo… https:…
     ##  4 Registered … "   c… r     new     2018-02-08 15:56:28 1gDk6bQL… https:…
@@ -58,15 +68,15 @@ Identify query sheet:
 
     ##                   Spreadsheet title: Pre-course survey (Responses)
     ##                  Spreadsheet author: tapa741
-    ##   Date of googlesheets registration: 2018-03-18 20:26:57 GMT
-    ##     Date of last spreadsheet update: 2018-03-18 18:14:38 GMT
+    ##   Date of googlesheets registration: 2018-03-18 21:40:22 GMT
+    ##     Date of last spreadsheet update: 2018-03-18 21:10:51 GMT
     ##                          visibility: private
     ##                         permissions: rw
     ##                             version: new
     ## 
     ## Contains 1 worksheets:
     ## (Title): (Nominal worksheet extent as rows x columns)
-    ## Form Responses 1: 114 x 14
+    ## Form Responses 1: 115 x 14
     ## 
     ## Key: 13ukx0z0KG6FxeMQYW71C56pwTRA4Hmx02EtdGAt9RAg
     ## Browser URL: https://docs.google.com/spreadsheets/d/13ukx0z0KG6FxeMQYW71C56pwTRA4Hmx02EtdGAt9RAg/
@@ -91,7 +101,7 @@ Import data to table (data\_frame):
     ##   `Email Address` = col_character()
     ## )
 
-    ## # A tibble: 13 x 8
+    ## # A tibble: 14 x 8
     ##    Timestamp  `How big is your … `What operating sy… `Did you have runnin…
     ##    <chr>                   <int> <chr>               <chr>                
     ##  1 3/8/2018 …                  5 macOS 10.13.3       R, Rstudio, Git      
@@ -107,6 +117,7 @@ Import data to table (data\_frame):
     ## 11 3/17/2018…                  1 windows 10          R, Rstudio, Git      
     ## 12 3/18/2018…                  1 Window 7            Git                  
     ## 13 3/18/2018…                  1 Windows 10 x64      R, Rstudio, Git      
+    ## 14 3/18/2018…                  2 windows 8           Git                  
     ## # ... with 4 more variables: `Do you have GitHub account?` <chr>, `Do you
     ## #   have your own dataset (at least in mind) that you would like to use
     ## #   for individual project?` <chr>, `If you answered 'Yes' to previous
@@ -121,7 +132,7 @@ Convert wide table to long format (gather):
   gather(key = key, value = value, -Timestamp))
 ```
 
-    ## # A tibble: 91 x 3
+    ## # A tibble: 98 x 3
     ##    Timestamp          key                                    value
     ##    <chr>              <chr>                                  <chr>
     ##  1 3/8/2018 16:25:36  How big is your previous R experience? 5    
@@ -134,7 +145,7 @@ Convert wide table to long format (gather):
     ##  8 3/15/2018 15:37:35 How big is your previous R experience? 1    
     ##  9 3/16/2018 13:23:51 How big is your previous R experience? 1    
     ## 10 3/17/2018 12:31:58 How big is your previous R experience? 2    
-    ## # ... with 81 more rows
+    ## # ... with 88 more rows
 
 Results
 -------
@@ -152,3 +163,68 @@ resp_gathered %>%
 ```
 
 ![](index_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
+Mostly, students declare zero previous experience with R language. Obviously, it seems that five categories that I proposed in questionnaire was too much -- three categories would have been sufficient.
+
+**What operating system and version your computer is running?**
+
+``` r
+os <- resp_gathered %>% 
+  filter(key == "What operating system and version your computer is running?") %>% 
+  select(value, Timestamp) %>% 
+  mutate(value = str_to_lower(value),
+         value = str_remove(value, ",.*| x64"),
+         os = case_when(
+           str_detect(value, "macos") ~ "macOS",
+           str_detect(value, "os x") ~ "OS X",
+           TRUE ~ "Win"
+         ),
+         vers = str_extract(value, "[[:digit:][:punct:]]*( pro)?$"),
+         os = str_c(os, vers, sep = " "))
+os %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = os))
+```
+
+![](index_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
+**Did you have running installation of the following software on your computer?**
+
+``` r
+resp_gathered %>% 
+  filter(str_detect(key, "Did you have running")) %>% 
+  select(value, Timestamp) %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = value))
+```
+
+![](index_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
+It's interesting that **git** was installed on all computers. Perhaps the question was ill-posed by me ...
+
+**Do you have GitHub account?**
+
+``` r
+resp_gathered %>% 
+  filter(key == "Do you have GitHub account?") %>% 
+  select(value, Timestamp) %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = value)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 12, by = 2))
+```
+
+![](index_files/figure-markdown_github/unnamed-chunk-9-1.png)
+
+Again, mostly all have GitHub account ...
+
+``` r
+resp_gathered %>% pull(key) %>% unique()
+```
+
+    ## [1] "How big is your previous R experience?"                                                                                                                                                            
+    ## [2] "What operating system and version your computer is running?"                                                                                                                                       
+    ## [3] "Did you have running installation of the following software on your computer (check all that apply)?"                                                                                              
+    ## [4] "Do you have GitHub account?"                                                                                                                                                                       
+    ## [5] "Do you have your own dataset (at least in mind) that you would like to use for individual project?"                                                                                                
+    ## [6] "If you answered 'Yes' to previous question, please describe your dataset (name, how many rows/columns/number of variables, are your values categorical or continuous, csv, json, xls, html, etc.):"
+    ## [7] "Email Address"
