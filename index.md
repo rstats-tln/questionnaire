@@ -23,7 +23,10 @@ library(tidyverse)
 library(googlesheets)
 ```
 
-Download query spreadsheet:
+Import data
+-----------
+
+Download query spreadsheet from google drive:
 
 ``` r
 (my_sheets <- gs_ls())
@@ -55,7 +58,7 @@ Identify query sheet:
 
     ##                   Spreadsheet title: Pre-course survey (Responses)
     ##                  Spreadsheet author: tapa741
-    ##   Date of googlesheets registration: 2018-03-18 20:06:19 GMT
+    ##   Date of googlesheets registration: 2018-03-18 20:26:57 GMT
     ##     Date of last spreadsheet update: 2018-03-18 18:14:38 GMT
     ##                          visibility: private
     ##                         permissions: rw
@@ -67,6 +70,8 @@ Identify query sheet:
     ## 
     ## Key: 13ukx0z0KG6FxeMQYW71C56pwTRA4Hmx02EtdGAt9RAg
     ## Browser URL: https://docs.google.com/spreadsheets/d/13ukx0z0KG6FxeMQYW71C56pwTRA4Hmx02EtdGAt9RAg/
+
+Import data to table (data\_frame):
 
 ``` r
 (responses <- surv %>% gs_read())
@@ -109,6 +114,8 @@ Identify query sheet:
     ## #   rows/columns/number of variables, are your values categorical or
     ## #   continuous, csv, json, xls, html, etc.):` <chr>, `Email Address` <lgl>
 
+Convert wide table to long format (gather):
+
 ``` r
 (resp_gathered <- responses %>% 
   gather(key = key, value = value, -Timestamp))
@@ -128,3 +135,20 @@ Identify query sheet:
     ##  9 3/16/2018 13:23:51 How big is your previous R experience? 1    
     ## 10 3/17/2018 12:31:58 How big is your previous R experience? 2    
     ## # ... with 81 more rows
+
+Results
+-------
+
+**How big is your previous R experience?**
+
+``` r
+resp_gathered %>% 
+  filter(key == "How big is your previous R experience?") %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = value)) +
+  scale_x_discrete(labels = c("Null", "Little", "Have done\nsomething\nuseful")) +
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2)) +
+  labs(x = "How big is your previous R experience?")
+```
+
+![](index_files/figure-markdown_github/unnamed-chunk-6-1.png)

@@ -15,7 +15,9 @@ library(tidyverse)
 library(googlesheets)
 ```
 
-Download query spreadsheet:
+## Import data
+
+Download query spreadsheet from google drive:
 ```{r}
 (my_sheets <- gs_ls())
 ```
@@ -25,17 +27,27 @@ Identify query sheet:
 (surv <- gs_title("Pre-course survey (Responses)"))
 ```
 
+Import data to table (data_frame):
 ```{r}
 (responses <- surv %>% gs_read())
 ```
 
+Convert wide table to long format (gather):
 ```{r}
 (resp_gathered <- responses %>% 
   gather(key = key, value = value, -Timestamp))
 ```
 
+## Results
 
+**How big is your previous R experience?**
 ```{r}
-
+resp_gathered %>% 
+  filter(key == "How big is your previous R experience?") %>% 
+  ggplot() +
+  stat_count(mapping = aes(x = value)) +
+  scale_x_discrete(labels = c("Null", "Little", "Have done\nsomething\nuseful")) +
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2)) +
+  labs(x = "How big is your previous R experience?")
 ```
 
