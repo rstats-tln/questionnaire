@@ -1,55 +1,0 @@
-"0","(responses <- surv %>% gs_read())"
-"2","Accessing worksheet titled 'Form Responses 1'.
-"
-"1","Downloading: "
-"1",""
-"1","900 B"
-"1",""
-"1","     "
-"1","Downloading: "
-"1",""
-"1","900 B"
-"1",""
-"1","     "
-"1","Downloading: "
-"1",""
-"1","910 B"
-"1",""
-"1","     "
-"1","Downloading: "
-"1",""
-"1","910 B"
-"1",""
-"1","     "
-"1","Downloading: "
-"1",""
-"1","910 B"
-"1",""
-"1","     "
-"1","Downloading: "
-"1",""
-"1","910 B"
-"1",""
-"1","     "
-"1","Downloading: "
-"1",""
-"1","910 B"
-"1",""
-"1","     "
-"1","Downloading: "
-"1",""
-"1","910 B"
-"1",""
-"1","     "
-"2","Parsed with column specification:
-cols(
-  Timestamp = col_character(),
-  `How big is your previous R experience?` = col_integer(),
-  `What operating system and version your computer is running?` = col_character(),
-  `Did you have running installation of the following software on your computer (check all that apply)?` = col_character(),
-  `Do you have GitHub account?` = col_character(),
-  `Do you have your own dataset (at least in mind) that you would like to use for individual project?` = col_character(),
-  `If you answered 'Yes' to previous question, please describe your dataset (name, how many rows/columns/number of variables, are your values categorical or continuous, csv, json, xls, html, etc.):` = col_character(),
-  `Email Address` = col_character()
-)
-"

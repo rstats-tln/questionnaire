@@ -1,2 +1,0 @@
-"0","responses %>% "
-"0","  gather(key = key, value = value, -Timestamp)"
