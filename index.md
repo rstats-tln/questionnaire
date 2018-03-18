@@ -72,7 +72,7 @@ Identify query sheet:
 
     ##                   Spreadsheet title: Pre-course survey (Responses)
     ##                  Spreadsheet author: tapa741
-    ##   Date of googlesheets registration: 2018-03-18 23:00:22 GMT
+    ##   Date of googlesheets registration: 2018-03-18 23:04:18 GMT
     ##     Date of last spreadsheet update: 2018-03-18 21:10:51 GMT
     ##                          visibility: private
     ##                         permissions: rw
@@ -289,4 +289,4 @@ data_frame(username, created_at) %>%
 
 ![](index_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
-**Most GitHub accounts were created last week...**
+GitHub reveals that **most accounts were created last week...**
